@@ -1,13 +1,12 @@
 import { View, StyleSheet, Text } from "react-native";
 import TodoList from "./TodoList";
-import SearchBar from "./SearchBar";
+
 
 
 export default function TodoBox(){
     return(
         <View style ={styles.container}>
             <Text style ={styles.header}>PhoneBook app</Text>
-            <SearchBar/>
             <TodoList />
         </View>
     )

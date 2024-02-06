@@ -10,7 +10,7 @@ export const loadUserSuccess = (data, page) => ({
 })
 
 export const loadUser = ({keyword, sortBy, sortMode, page}) => dispatch => axios.get('http://192.168.0.113:3001/api/phonebook', {params: {keyword, sortBy, sortMode, page}}).then(({ data }) => {      
-    dispatch(loadUserSuccess(data, page))
+        dispatch(loadUserSuccess(data, page))
 }).catch((err) => {
     dispatch(loadUserFailed())
 })
@@ -41,11 +41,12 @@ export const addUserDraw = (items) => ({
     items
 })
 
-export const addUser = ({id, name, phone}) => dispatch => {
-    dispatch(addUserDraw({id, name, phone}))
-    return axios.post('http://192.168.0.113:3001/api/phonebook', {id, name, phone}).then(({ data }) => {
+export const addUser = ({name, phone}) => dispatch => {
+    dispatch(addUserDraw({name, phone}))
+    return axios.post('http://192.168.0.113:3001/api/phonebook', {name, phone}).then(({ data }) => {
         dispatch(addUserSuccess(data))
     }).catch((err) => {
+        console.log(err)
         dispatch(addUserFailed())
     })
 }

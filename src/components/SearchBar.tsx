@@ -1,17 +1,41 @@
 import { View, StyleSheet, TouchableOpacity, TextInput} from "react-native";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faArrowUpZA, faUserPlus } from "@fortawesome/free-solid-svg-icons";
+import { faArrowDownAZ, faArrowUpZA, faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import { useNavigation } from '@react-navigation/native';
+import { useState } from 'react';
 
-export default function SearchBar(){
+
+export default function SearchBar({setKeyword, setPage, setSortBy, setSortMode}){
     const navigation: any = useNavigation();
+    const [isBoolean, setIsBoolean] = useState(true)
 
+    const onSearch = (e : any) => {
+        setKeyword(e)
+        setPage(1)
+    }
+    
+    const onSortAsc = () => {
+        setIsBoolean(prevState => !prevState)
+        setSortBy('name')
+        setSortMode('asc')
+        setPage(1)
+    }
+
+    const onSortDesc = () => {
+        setIsBoolean(prevState => !prevState)
+        setSortBy('name')
+        setSortMode('desc')
+        setPage(1)
+    }
+    
     return(
         <View style={styles.searchBar}>
-            <TouchableOpacity
+            {isBoolean ? <TouchableOpacity
           style={styles.buttonSort}
-          activeOpacity={0.5}><FontAwesomeIcon icon={faArrowUpZA} size={25} style={styles.imgIcon} /></TouchableOpacity>
-            <TextInput style={styles.form}></TextInput>
+          activeOpacity={0.5} onPress={onSortAsc}><FontAwesomeIcon icon={faArrowUpZA} size={25} style={styles.imgIcon} /></TouchableOpacity> : <TouchableOpacity
+          style={styles.buttonSort}
+          activeOpacity={0.5} onPress={onSortDesc}><FontAwesomeIcon icon={faArrowDownAZ} size={25} style={styles.imgIcon} /></TouchableOpacity>}
+            <TextInput style={styles.form} onChangeText={e => onSearch(e)}></TextInput>
             <TouchableOpacity
           style={styles.buttonAdd}
           activeOpacity={0.5} onPress={() =>
@@ -20,6 +44,7 @@ export default function SearchBar(){
         </View>
     )
 }
+
 
 const styles = StyleSheet.create({
     imageSearch:{

@@ -1,21 +1,28 @@
 import { View, StyleSheet, Text, Button, Image, TouchableOpacity, TextInput } from "react-native";
+import { useDispatch } from 'react-redux'
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faFloppyDisk, faPenToSquare, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { useNavigation } from '@react-navigation/native';
+import { removeUser } from '../actions/users'
+import { updateUser } from '../actions/users'
 
 const logoImg = require("../../assets/usertie.png")
 
-export default function TodoItem({ todo }: { todo: { name: any, phone: any } }) {
+export default function TodoItem({ todo }: { todo: { id: any, name: string, phone: string, avatar: any } }) {
     const navigation: any = useNavigation();
     
-    const [userInput, setUserInput] = useState({})
+    const [userInput, setUserInput] = useState({
+        name: todo.name, phone: todo.phone
+    })
+    
 
     useEffect(() => {
         setUserInput({name: todo.name, phone: todo.phone})
-    }, [todo.name, todo.phone])
+    }, [todo])
     
     const [isEdit, setIsEdit] = useState(false)
+    const dispatch : any = useDispatch()
 
     if (isEdit) {
         return (
@@ -26,15 +33,21 @@ export default function TodoItem({ todo }: { todo: { name: any, phone: any } }) 
                         }>
                         <Image
                             style={styles.imageAvatar}
-                            source={logoImg}
+                            source={todo.avatar == null ? logoImg : {uri :`http://192.168.0.113:3001/images/${todo.avatar}`}}
                         ></Image>
                     </TouchableOpacity>
                 </View>
                 <View>
-                    <TextInput style={styles.form}></TextInput>
-                    <TextInput style={styles.form}></TextInput>
+                    <TextInput style={styles.form} defaultValue={userInput.name} onChangeText={(e) => setUserInput({...userInput, name: e})}></TextInput>
+                    <TextInput style={styles.form} defaultValue={userInput.phone} onChangeText={(e) => setUserInput({...userInput, phone: e})}></TextInput>
                     <View style={styles.buttonStyle}>
-                        <TouchableOpacity onPress={() => (setIsEdit(false))}>
+                        <TouchableOpacity onPress={() => (dispatch(updateUser({ 
+                                    id : todo.id,
+                                    name : userInput.name,
+                                    phone : userInput.phone,
+                                    avatar : todo.avatar
+                                })),
+                                (setIsEdit(false)))}>
                             <FontAwesomeIcon icon={faFloppyDisk} />
                         </TouchableOpacity>
                     </View>
@@ -51,7 +64,7 @@ export default function TodoItem({ todo }: { todo: { name: any, phone: any } }) 
                         }>
                         <Image
                             style={styles.imageAvatar}
-                            source={logoImg}
+                            source={todo.avatar == null ? logoImg : {uri :`http://192.168.0.113:3001/images/${todo.avatar}`}}
                         ></Image>
                     </TouchableOpacity>
                 </View>
