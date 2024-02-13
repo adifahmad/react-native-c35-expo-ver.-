@@ -1,6 +1,6 @@
 import { View, StyleSheet, TouchableOpacity, TextInput} from "react-native";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faArrowDownAZ, faArrowUpZA, faUserPlus } from "@fortawesome/free-solid-svg-icons";
+import { faArrowDownAZ, faArrowUpZA, faSearch, faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
 
@@ -35,7 +35,10 @@ export default function SearchBar({setKeyword, setPage, setSortBy, setSortMode})
           activeOpacity={0.5} onPress={onSortAsc}><FontAwesomeIcon icon={faArrowUpZA} size={25} style={styles.imgIcon} /></TouchableOpacity> : <TouchableOpacity
           style={styles.buttonSort}
           activeOpacity={0.5} onPress={onSortDesc}><FontAwesomeIcon icon={faArrowDownAZ} size={25} style={styles.imgIcon} /></TouchableOpacity>}
+            <View style={styles.searchSection}>
+            <FontAwesomeIcon style={styles.searchIcon}icon={faSearch}/>
             <TextInput style={styles.form} onChangeText={e => onSearch(e)}></TextInput>
+            </View>
             <TouchableOpacity
           style={styles.buttonAdd}
           activeOpacity={0.5} onPress={() =>
@@ -52,7 +55,7 @@ const styles = StyleSheet.create({
         height:18
     },
     imgIcon:{
-        marginTop: 8
+        marginTop: 10
     },
     image:{
         marginTop:8,
@@ -85,10 +88,29 @@ const styles = StyleSheet.create({
     form: {
         padding: 7,
         backgroundColor: '#ffffff',
-        width: '70%',
+        width: '100%',
+        flex: 1,
+        paddingTop: 10,
+        paddingRight: 10,
+        paddingBottom: 10,
+        paddingLeft: 0,
+        color: '#424242',
+        fontSize: 15
+      },
+      searchSection: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#fff',
         borderWidth: 2,
         borderStyle: 'solid',
         borderRadius: 5,
         borderColor: '#000000'
-      },
+    },
+    searchIcon: {
+        padding: 10,
+        marginLeft: 4,
+        marginRight: 5
+    }
 })

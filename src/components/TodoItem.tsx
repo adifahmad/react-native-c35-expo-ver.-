@@ -75,7 +75,7 @@ export default function TodoItem({ todo }: { todo: { id: any, name: string, phon
                         <TouchableOpacity onPress={() => (setIsEdit(true))}>
                             <FontAwesomeIcon icon={faPenToSquare} style={styles.logoEdit} />
                         </TouchableOpacity>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={() => dispatch(removeUser(todo.id))}>
                             <FontAwesomeIcon icon={faTrashCan} style={styles.logoDelete} />
                         </TouchableOpacity>
                     </View>

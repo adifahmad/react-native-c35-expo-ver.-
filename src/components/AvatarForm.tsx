@@ -1,38 +1,83 @@
-import { Button, View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native'
-import { useState } from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { Button, View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native'
+import { useCallback, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { Link, useLocation, useNavigate } from "react-router-dom"
+import { useNavigation } from '@react-navigation/native'
 import { updateAvatar } from '../actions/users'
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
-import Ionicons from '@expo/vector-icons/Ionicons';
+import { useRoute } from '@react-navigation/native'
+const logoImg = require("../../assets/usertie.png")
 
 const imgDir = FileSystem.documentDirectory + 'images/';
 
 
 export default function AvatarForm() {
-    const location = useLocation();
-    const { user } = location.state;
-    const dispatch = useDispatch()
-    const navigate = useNavigate()
-    const [avatar, setUpdateAvatar] = useState({0 : ''})
+    const store: any = useRoute();
+    const user = store.name;
+    const dispatch: any = useDispatch()
+    const navigation: any = useNavigation()
+    const [avatar, setUpdateAvatar] = useState(true)
+    const [file, setFile]: [any, any] = useState<any>(null);
 
-    var formData = new FormData();
-    formData.append("avatar", avatar[0]);
+    const upload = () => {
+        const formData: any = new FormData();
+        formData.append('avatar', {
+            name: file.assets[0].fileName,
+            size: file.assets[0].fileSize,
+            type: file.assets[0].type,
+            uri: file.assets[0].uri,
+        });
+        dispatch(updateAvatar({ id: user.id, avatar: formData }));
+        navigation.goBack();
+    };
+
+    const onButtonPress = useCallback(
+        async (type: 'capture' | 'library', options: any) => {
+          try {
+            let data: any;
+            if (type === 'capture') {
+              data = await ImagePicker.launchCameraAsync(options);
+            } else {
+              data = await ImagePicker.launchImageLibraryAsync(options);
+            }
+            if (!data?.didCancel) {
+              setFile(data);
+              setUpdateAvatar(false);
+            }
+          } catch (error) {
+            console.error('Error selecting image:', error); // Handle error appropriately
+          }
+        },
+        [setFile]
+      );
+      
+
 
     return (
         <View>
             <View>
                 <View style={styles.avatarForm}>
-                    <Text>Pilih Avatar</Text>
+                    <Text style={styles.textAvatar}>Pilih Avatar</Text>
                     <View>
-                        <Button title="Select Avatar"/>
+                        {avatar && (<Image style={styles.imgAvatar} source={{
+                            uri: `http://192.168.0.113:3001/images/${user.avatar ? user.avatar : 'usertie.png'}`
+                        }} />)}
+                        {file?.assets && (
+                            <Image style={styles.imgAvatar} source={{ uri: file?.assets[0].uri }} />
+                        )}
+                        <Button title="Select Avatar" onPress={() =>
+                            onButtonPress('library', {
+                                mediaTypes: ImagePicker.MediaTypeOptions.Images,
+			                    allowsEditing: true,
+			                    aspect: [4, 3],
+			                    quality: 0.75
+                            })
+                        } />
                     </View>
                 </View>
                 <View>
-                    <TouchableOpacity style={styles.buttonSave}>
-                    <Text style={styles.textButton}> Save </Text>
+                    <TouchableOpacity style={styles.buttonSave} onPress={upload}>
+                        <Text style={styles.textButton}> Save </Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -43,13 +88,16 @@ export default function AvatarForm() {
 
 const styles = StyleSheet.create({
 
-    avatarForm:{
-        alignItems:'center',
-        marginTop: 100,
-        marginLeft: 100,
-        flexDirection: 'row'
+    textAvatar:{
+        fontSize: 20,
     },
-    buttonSave:{
+
+    avatarForm: {
+        alignItems: 'center',
+        marginTop: 50,
+        flexDirection: 'column'
+    },
+    buttonSave: {
         marginTop: 50,
         marginLeft: 5,
         backgroundColor: '#B8860B',
@@ -61,11 +109,16 @@ const styles = StyleSheet.create({
         borderWidth: 1
 
     },
-    textButton:{
+    textButton: {
         textAlign: 'center',
         justifyContent: 'center',
         fontWeight: 'bold',
         fontSize: 15,
         marginTop: 7
+    },
+    imgAvatar: {
+        width: 350,
+        height: 350,
+        resizeMode: 'center',
     }
 })
