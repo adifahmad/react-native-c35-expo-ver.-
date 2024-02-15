@@ -27,7 +27,7 @@ export default function AvatarForm() {
             type: file.assets[0].type,
             uri: file.assets[0].uri,
         });
-        dispatch(updateAvatar({ id: user.id, avatar: formData }));
+        dispatch(updateAvatar({ id: store.params.id, avatar: formData }));
         navigation.goBack();
     };
 
@@ -60,17 +60,16 @@ export default function AvatarForm() {
                     <Text style={styles.textAvatar}>Pilih Avatar</Text>
                     <View>
                         {avatar && (<Image style={styles.imgAvatar} source={{
-                            uri: `http://192.168.0.113:3001/images/${user.avatar ? user.avatar : 'usertie.png'}`
+                            uri: `http://192.168.0.113:3001/images/${store.params.avatar ? store.params.avatar : 'usertie.png'}`
                         }} />)}
                         {file?.assets && (
                             <Image style={styles.imgAvatar} source={{ uri: file?.assets[0].uri }} />
                         )}
                         <Button title="Select Avatar" onPress={() =>
                             onButtonPress('library', {
-                                mediaTypes: ImagePicker.MediaTypeOptions.Images,
-			                    allowsEditing: true,
-			                    aspect: [4, 3],
-			                    quality: 0.75
+                                selectionLimit: 1,
+                                mediaType: 'photo',
+                                includeBase64: false
                             })
                         } />
                     </View>

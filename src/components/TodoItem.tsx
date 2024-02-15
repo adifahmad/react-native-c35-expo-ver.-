@@ -29,7 +29,7 @@ export default function TodoItem({ todo }: { todo: { id: any, name: string, phon
             <View style={styles.itemRow}>
                 <View>
                     <TouchableOpacity onPress={() =>
-                        navigation.navigate("Avatar Form")
+                        navigation.navigate("Avatar Form", {id: todo.id, avatar : todo.avatar})
                         }>
                         <Image
                             style={styles.imageAvatar}
@@ -60,7 +60,7 @@ export default function TodoItem({ todo }: { todo: { id: any, name: string, phon
                 <View>
                     <TouchableOpacity
                         onPress={() =>
-                        navigation.navigate("Avatar Form")
+                        navigation.navigate("Avatar Form" , {id: todo.id, avatar : todo.avatar})
                         }>
                         <Image
                             style={styles.imageAvatar}

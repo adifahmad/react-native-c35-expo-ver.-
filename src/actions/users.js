@@ -75,9 +75,10 @@ export const updateAvatar = ({id, avatar}) => dispatch => {
             'Content-Type': 'multipart/form-data'
           }
     }).then(({ data }) => {
-        console.log(data)
+        console.log("jalan")
         dispatch({type: 'UPDATE_AVATAR_SUCCESS', id, avatar})
     }).catch((err) => {
+        console.log(err)
         dispatch({type: 'UPDATE_AVATAR_FAILED'})
     })
 }
