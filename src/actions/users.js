@@ -68,17 +68,16 @@ export const updateUser = ({id, name, phone, avatar}) => dispatch => {
     })
 }
 
-export const updateAvatar = ({id, avatar}) => dispatch => {
+export const updateAvatar = ({id,avatar}) => dispatch => {
     dispatch(updateAvatarDraw())
     return axios.put(`http://192.168.0.113:3001/api/phonebook/${id}/avatar`, avatar, {
         headers: {
-            'Content-Type': 'multipart/form-data'
-          }
+          'Content-Type': 'multipart/form-data'
+        }
     }).then(({ data }) => {
-        console.log("jalan")
         dispatch({type: 'UPDATE_AVATAR_SUCCESS', id, avatar})
     }).catch((err) => {
-        console.log(err)
+        console.log('err.message', err.message)
         dispatch({type: 'UPDATE_AVATAR_FAILED'})
     })
 }

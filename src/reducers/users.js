@@ -17,7 +17,7 @@ const users = (state = { phonebook: [] }, action) => {
             return sortBy
 
         case 'UPDATE_AVATAR_SUCCESS':
-            return { ...state, phonebook: [...state.filter(data => data.id !== action.id), { id: action.id, avatar: action.avatar }] }
+            return { ...state, phonebook: [...state.phonebook.filter(data => data.id !== action.id), { id: action.id, avatar: action.avatar }] }
 
         case 'REMOVE_USER_FAILED':
         case 'LOAD_USER_FAILED':
